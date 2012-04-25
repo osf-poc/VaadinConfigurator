@@ -8,9 +8,14 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.*;
+
 import osf.poc.vaadin.MovieEditor.EditorSavedEvent;
 import osf.poc.vaadin.MovieEditor.EditorSavedListener;
 import osf.poc.vaadin.model.Movie;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 public class ConfiguratorApplication extends Application {
     private static String[] visibleCols = new String[] { "lastName", "firstName", "company" };
@@ -27,6 +32,30 @@ public class ConfiguratorApplication extends Application {
         initContactAddRemoveButtons();
         initAddressList();
         initFilteringControls();
+        
+        try {
+ 
+		Client client = Client.create();
+ 
+		WebResource webResource = client.resource("http://localhost:8080/JerseyRest-1.0-SNAPSHOT/configurations/configuration/conf1");
+ 
+		ClientResponse response = webResource.accept("text/plain").get(ClientResponse.class);
+ 
+		if (response.getStatus() != 200) {
+		   throw new RuntimeException("Failed : HTTP error code : "
+			+ response.getStatus());
+		}
+ 
+		String output = response.getEntity(String.class);
+ 
+		System.out.println("Output from Server .... \n");
+		System.out.println(output);
+ 
+	  } catch (Exception e) {
+ 
+		e.printStackTrace();
+ 
+	  }
     }
 
     private void initLayout() {
