@@ -27,60 +27,29 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-      
-
-      <!-- Compile custom GWT components or widget dependencies with the GWT compiler -->
-      <!--
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>${gwt.plugin.version}</version>
-        <configuration>
-          <webappDirectory>${project.build.directory}/${project.build.finalName}/VAADIN/widgetsets</webappDirectory>
-          <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-          <runTarget>VaadinBoard</runTarget>
-          <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
-          <noServer>true</noServer>
-          <port>8080</port>
-          <compileReport>false</compileReport>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>resources</goal>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${gwt.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwt.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>com.vaadin</groupId>
-        <artifactId>vaadin-maven-plugin</artifactId>
-        <version>1.0.2</version>
-        <executions>
-          <execution>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.2.1</version>
+            <executions>
+                <execution>
+                <phase>install</phase>
+                <goals>
+                <goal>exec</goal>
+                </goals>
+                </execution>
+            </executions>
             <configuration>
+                <executable>${env.ASADMIN_PATH}</executable>
+            <!-- <workingDirectory>/tmp</workingDirectory> -->
+            <arguments>
+                <argument>deploy</argument>
+                <argument>--force</argument>
+                <argument>${project.build.directory}/${project.artifactId}-${project.version}.war</argument>
+            </arguments>
             </configuration>
-            <goals>
-              <goal>update-widgetset</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      -->
-
+        </plugin>
+      
       <!-- A simple Jetty test server at http://localhost:8080/VaadinBoard can be launched with the Maven goal jetty:run 
         and stopped with jetty:stop -->
       <plugin>
@@ -128,46 +97,18 @@
       <name>Repository for library Library[eclipselink]</name>
     </repository>
   </repositories>
-
-  <!--
-  <pluginRepositories>
-    <pluginRepository>
-      <id>codehaus-snapshots</id>
-      <url>http://nexus.codehaus.org/snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </pluginRepository>
-    <pluginRepository>
-      <id>vaadin-snapshots</id>
-      <url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-  -->
-
+  
   <dependencies>
-      
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin</artifactId>
       <version>${vaadin.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>com.vaadin.addon</groupId>
       <artifactId>jpacontainer-addon-agpl-3.0</artifactId>
       <version>2.1.0</version>
     </dependency>
-    
     <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>customfield</artifactId>
@@ -178,28 +119,12 @@
             <artifactId>beanvalidation-addon</artifactId>
             <version>1.0.0</version>
     </dependency>
-        
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
-    
-   <!--<dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-      <classifier>sources</classifier>
-      <scope>provided</scope>
-	</dependency>
-    -->
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>eclipselink</artifactId>
@@ -219,5 +144,4 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-
 </project>
