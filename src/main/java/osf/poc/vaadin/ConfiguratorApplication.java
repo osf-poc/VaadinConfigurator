@@ -10,7 +10,6 @@ public class ConfiguratorApplication extends Application {
     private static String[] visibleCols = new String[] { "name", "value" };
 
     private Table contactList = new Table();
-    private HorizontalLayout bottomLeftCorner = new HorizontalLayout();
     private PropertiesContainer container = new PropertiesContainer();
     
     @Override
@@ -21,17 +20,22 @@ public class ConfiguratorApplication extends Application {
 
     private void initLayout() {
         VerticalLayout left = new VerticalLayout();
-        setMainWindow(new Window("Vaadin Configurator", left));
+        left.setDebugId("111");
+        
+        Window window = new Window("Vaadin Configurator", left);
+        window.setDebugId("222");
+        window.setName("vaadin-configurator");
+        setMainWindow(window);
         
         left.setSizeFull();
         left.addComponent(contactList);
         contactList.setSizeFull();
         contactList.setColumnReorderingAllowed(true);
         left.setExpandRatio(contactList, 1);
-        left.addComponent(bottomLeftCorner);
     }
 
-    private void initPropertiesList() {        
+    private void initPropertiesList() {    
+        contactList.setDebugId("333");
         contactList.setContainerDataSource(container);
         contactList.setVisibleColumns(visibleCols);
         contactList.setSelectable(true);
