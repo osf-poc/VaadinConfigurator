@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Property {
     private String name;
-    private String value;
+    private String data;
     
     public Property(){
         super();
@@ -17,7 +17,7 @@ public class Property {
         super();
         
         this.name = name;
-        this.value = value;
+        this.data = value;
     }
 
     public String getName() {
@@ -29,10 +29,10 @@ public class Property {
     }
 
     public String getValue() {
-        return value;
+        return data;
     }
 
     public void setValue(String value) {
-        this.value = value;
+        this.data = value;
     }
 }
