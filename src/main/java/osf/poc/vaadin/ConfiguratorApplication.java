@@ -1,44 +1,57 @@
 package osf.poc.vaadin;
 
 import com.vaadin.Application;
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.*;
-import osf.poc.vaadin.model.PropertiesContainer;
 
+/**
+ * Main class for the Vaadin configuration application
+ */
 public class ConfiguratorApplication extends Application {
-    private static String[] visibleCols = new String[] { "name", "value" };
+    public static final String MENU_CONFIG = "Configuration";
+    public static final String MENU_ABOUT = "About";
 
-    private Table contactList = new Table();
-    private PropertiesContainer container = new PropertiesContainer();
+    // Page components
+    private final Label title = new Label("Configuration application using Vaadin/Jersey");
+    private final MenuBar menuBar = new MenuBar();
+    Panel currentPanel = new ConfigPanel();
+    
+    // Page layouts
+    private VerticalLayout mainLayout = new VerticalLayout();
     
     @Override
     public void init() {
         initLayout();
-        initPropertiesList();
     }
 
     private void initLayout() {
-        VerticalLayout left = new VerticalLayout();
-        left.setDebugId("111");
+        final Window main = new Window("Vaadin Jersey Configurator", mainLayout);
+        //main.setName("vaadin-jersey-configurator");
+        main.setDebugId("WindowId");            // For performance tests
+        mainLayout.setDebugId("AppLayoutId");   // For performance tests
+        setMainWindow(main);
         
-        Window window = new Window("Vaadin Configurator", left);
-        window.setDebugId("222");
-        window.setName("vaadin-configurator");
-        setMainWindow(window);
+        // Title
+        title.setStyleName("h1");
+        title.setWidth(null);
+        mainLayout.addComponent(title);
         
-        left.setSizeFull();
-        left.addComponent(contactList);
-        contactList.setSizeFull();
-        contactList.setColumnReorderingAllowed(true);
-        left.setExpandRatio(contactList, 1);
+        // Menu
+        MainMenuCommand command = new MainMenuCommand(this);
+        menuBar.addItem(MENU_CONFIG, command);
+        menuBar.addItem(MENU_ABOUT, command);
+        mainLayout.addComponent(menuBar);
+        
+        // Panel
+        mainLayout.addComponent(currentPanel);
+        
+        // Layout properties
+        mainLayout.setSpacing(true);
+        mainLayout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        mainLayout.setComponentAlignment(menuBar, Alignment.MIDDLE_CENTER);
     }
-
-    private void initPropertiesList() {    
-        contactList.setDebugId("333");
-        contactList.setContainerDataSource(container);
-        contactList.setVisibleColumns(visibleCols);
-        contactList.setSelectable(true);
-        contactList.setImmediate(true);
+    
+    void setPanel(Panel newPanel) {
+        mainLayout.replaceComponent(currentPanel, newPanel);
+        currentPanel = newPanel;
     }
 }

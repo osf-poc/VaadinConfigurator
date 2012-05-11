@@ -1,16 +1,18 @@
-package osf.poc.vaadin.model;
+package osf.poc.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Main model class representing a configuration property
+ */
 @XmlRootElement
 public class Property {
+    
     private String name;
     private String data;
     
     public Property(){
-        super();
-        
-        //Nothing
+        // Nothing to do
     }
     
     public Property(String name, String value){
