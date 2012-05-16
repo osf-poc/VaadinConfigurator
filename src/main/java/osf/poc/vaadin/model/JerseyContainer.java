@@ -6,7 +6,6 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.vaadin.data.Container.Filterable;
-import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.AbstractInMemoryContainer;
 import com.vaadin.data.util.filter.UnsupportedFilterException;
@@ -16,17 +15,21 @@ import java.util.Collection;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
 
-public class PropertiesContainer extends AbstractInMemoryContainer<Integer, String, PropertyItem> implements Filterable {
+/**
+ * Container data model for mapping tables with configuration properties
+ * using Jersey REST API
+ */
+public class JerseyContainer extends AbstractInMemoryContainer<Integer, String, PropertyItem> implements Filterable {
     private List<PropertyItem> items = new ArrayList<PropertyItem>();
     
-    public PropertiesContainer(){
-        ClientConfig config = new DefaultClientConfig();
+    public JerseyContainer(){
+        ClientConfig config = new DefaultClientConfig(); 
         Client client = Client.create(config);
         
         WebResource service = client.resource("http://localhost:8080/JerseyRest-1.0-SNAPSHOT/");
         
-        List<osf.poc.vaadin.model.Property> properties = 
-                service.path("configurations").path("properties").accept(MediaType.APPLICATION_XML).get(new GenericType<List<osf.poc.vaadin.model.Property>>(){});
+        List<osf.poc.model.Property> properties = 
+                service.path("configurations").path("properties").accept(MediaType.APPLICATION_XML).get(new GenericType<List<osf.poc.model.Property>>(){});
         
         List<Integer> ids = new ArrayList<Integer>();
         
@@ -37,8 +40,6 @@ public class PropertiesContainer extends AbstractInMemoryContainer<Integer, Stri
         
         setAllItemIds(ids);
     }
-
-    
     
     @Override
     protected PropertyItem getUnfilteredItem(Object itemId) {
