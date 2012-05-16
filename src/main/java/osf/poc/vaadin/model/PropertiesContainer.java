@@ -20,8 +20,9 @@ public class PropertiesContainer extends AbstractInMemoryContainer<Integer, Stri
     private List<PropertyItem> items = new ArrayList<PropertyItem>();
     
     public PropertiesContainer(){
-        ClientConfig config = new DefaultClientConfig(); 
+        ClientConfig config = new DefaultClientConfig();
         Client client = Client.create(config);
+        
         WebResource service = client.resource("http://localhost:8080/JerseyRest-1.0-SNAPSHOT/");
         
         List<osf.poc.vaadin.model.Property> properties = 
