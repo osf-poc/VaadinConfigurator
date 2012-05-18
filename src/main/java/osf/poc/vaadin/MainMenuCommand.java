@@ -16,9 +16,11 @@ public class MainMenuCommand implements MenuBar.Command {
 
     @Override
     public void menuSelected(MenuItem selectedItem) {
-        if(selectedItem.getText().equals(ConfiguratorApplication.MENU_CONFIG))
+        if(selectedItem.getText().equals(ConfiguratorApplication.MENU_CONFIG)) {
             application.setPanel(new ConfigPanel());
-        else if(selectedItem.getText().equals(ConfiguratorApplication.MENU_ABOUT))
+        }
+        else if(selectedItem.getText().equals(ConfiguratorApplication.MENU_ABOUT)) {
             application.setPanel(new AboutPanel());
+        }
     }
 }
