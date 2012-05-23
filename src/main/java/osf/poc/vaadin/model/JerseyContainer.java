@@ -1,6 +1,7 @@
 package osf.poc.vaadin.model;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -23,22 +24,38 @@ public class JerseyContainer extends AbstractInMemoryContainer<Integer, String, 
     private List<PropertyItem> items = new ArrayList<PropertyItem>();
     
     public JerseyContainer(){
-        ClientConfig config = new DefaultClientConfig(); 
-        Client client = Client.create(config);
+        Client client = null;
+        ClientResponse response = null;
         
-        WebResource service = client.resource("http://localhost:8080/JerseyRest-1.0-SNAPSHOT/");
-        
-        List<osf.poc.model.Property> properties = 
-                service.path("configurations").path("properties").accept(MediaType.APPLICATION_XML).get(new GenericType<List<osf.poc.model.Property>>(){});
-        
-        List<Integer> ids = new ArrayList<Integer>();
-        
-        for(int i = 0; i < properties.size(); ++i){
-            items.add(new PropertyItem(properties.get(i)));
-            ids.add(i);
+        try {
+            ClientConfig config = new DefaultClientConfig(); 
+            client = Client.create(config);
+
+            WebResource service = client.resource("http://10.192.62.239:8080/JerseyRest-1.0-SNAPSHOT/");
+
+            response = service.path("configurations").path("properties").accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+
+
+            List<osf.poc.model.Property> properties = 
+                    response.getEntity(new GenericType<List<osf.poc.model.Property>>(){});
+
+            List<Integer> ids = new ArrayList<Integer>();
+
+            for(int i = 0; i < properties.size(); ++i){
+                items.add(new PropertyItem(properties.get(i)));
+                ids.add(i);
+            }
+
+            setAllItemIds(ids);
+        } finally {
+            if(response != null){
+                response.close();
+            }
+            
+            if(client != null){
+                client.destroy();
+            }
         }
-        
-        setAllItemIds(ids);
     }
     
     @Override
